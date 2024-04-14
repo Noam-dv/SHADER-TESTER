@@ -1,5 +1,6 @@
 package backend;
 
+import flixel.FlxSprite;
 import haxe.ds.Vector;
 import math.Vectors.Vector2;
 

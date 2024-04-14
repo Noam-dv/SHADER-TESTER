@@ -314,10 +314,10 @@ class PlayState extends FlxState
 			}
 		}
 
-		handleDraggable();
+		handleDraggable(elapsed);
 	}
 
-	private function handleDraggable()
+	private function handleDraggable(elapsed:Float)
 	{
 		for (sprite in spriteTargets.keys())
 		{
@@ -328,8 +328,8 @@ class PlayState extends FlxState
 				getter.position.x = FlxG.mouse.x;
 				getter.position.y = FlxG.mouse.y;
 			}
-			sprite.x = FlxMath.lerp(sprite.x, spriteTargets.get(sprite).x - sprite.width / 2, elapsed * 10);
-			sprite.y = FlxMath.lerp(sprite.y, spriteTargets.get(sprite).y - sprite.height / 2, elapsed * 10);
+			ov.x = flixel.math.FlxMath.lerp(ov.x, spriteTargets.get(sprite).position.x - sprite.width / 2, elapsed * 10);
+			ov.y = flixel.math.FlxMath.lerp(ov.y, spriteTargets.get(sprite).position.y - sprite.height / 2, elapsed * 10);
 		}
 	}
 }
