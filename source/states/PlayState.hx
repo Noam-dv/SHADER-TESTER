@@ -42,17 +42,21 @@ class PlayState extends FlxState
 
 	var originalWidth:Int;
 	var originalHeight:Int;
+
+	// store future positions for sprites when dragging around
 	var spriteTargets:Map<FlxSprite, SpriteTarget> = new Map<FlxSprite, SpriteTarget>();
 
 	public var CAM_UI:FlxCamera;
 	public var CAM_MAIN:FlxCamera;
 
+	// array storing all sprites that can be dragged
 	public var draggableObjects:Array<FlxSprite> = [];
 
 	override public function create()
 	{
 		super.create();
 
+		// initalize cameras
 		CAM_UI = new FlxCamera();
 		CAM_MAIN = new FlxCamera();
 		CAM_UI.bgColor.alpha = 0;
@@ -60,6 +64,7 @@ class PlayState extends FlxState
 		FlxG.cameras.reset(CAM_MAIN);
 		FlxG.cameras.add(CAM_UI, false);
 
+		// initialize shaders
 		for (i in StupidUtil.readFolder("shaders"))
 		{
 			if (i.endsWith(".frag") || i.endsWith(".vert") || i.endsWith(".txt") || i.endsWith(".hx"))
@@ -92,6 +97,7 @@ class PlayState extends FlxState
 			}
 		}
 
+		// initialize UI and Store original window resolution into variable for the wdith and height thingys on the UI
 		originalWidth = Application.current.window.width;
 		originalHeight = Application.current.window.height;
 
@@ -107,6 +113,7 @@ class PlayState extends FlxState
 		addShaders();
 		add(ui);
 
+		// initialize drag and dropping functionality
 		FlxG.stage.window.onDropFile.add(function(path:String)
 		{
 			if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg"))
@@ -328,6 +335,7 @@ class PlayState extends FlxState
 				getter.position.x = FlxG.mouse.x;
 				getter.position.y = FlxG.mouse.y;
 			}
+			// i just learnt lerp meant linear interpolation am i stupid gang
 			ov.x = flixel.math.FlxMath.lerp(ov.x, spriteTargets.get(sprite).position.x - sprite.width / 2, elapsed * 10);
 			ov.y = flixel.math.FlxMath.lerp(ov.y, spriteTargets.get(sprite).position.y - sprite.height / 2, elapsed * 10);
 		}
