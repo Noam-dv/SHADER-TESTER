@@ -3,6 +3,7 @@ package states;
 import backend.*;
 import flixel.FlxCamera;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup;
