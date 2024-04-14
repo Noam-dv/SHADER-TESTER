@@ -312,5 +312,23 @@ class PlayState extends FlxState
 				iTimeComponent.pos = shaders[0].getFloat("iTime");
 			}
 		}
+
+		handleDraggable();
+	}
+
+	private function handleDraggable()
+	{
+		for (sprite in spriteTargets.keys())
+		{
+			var ov:FlxSprite = spriteTargets.get(sprite).sprite != null ? spriteTargets.get(sprite).sprite : sprite;
+			if (FlxG.mouse.pressed && FlxG.mouse.overlaps(ov))
+			{
+				var getter = spriteTargets.get(sprite);
+				getter.position.x = FlxG.mouse.x;
+				getter.position.y = FlxG.mouse.y;
+			}
+			sprite.x = FlxMath.lerp(sprite.x, spriteTargets.get(sprite).x - sprite.width / 2, elapsed * 10);
+			sprite.y = FlxMath.lerp(sprite.y, spriteTargets.get(sprite).y - sprite.height / 2, elapsed * 10);
+		}
 	}
 }
