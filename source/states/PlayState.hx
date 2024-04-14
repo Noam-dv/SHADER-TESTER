@@ -32,18 +32,21 @@ using StringTools;
 
 class PlayState extends FlxState
 {
-	var shaders:Array<NShader> = [];
-	var list:ListView;
-	var shadersPage:ContinuousHBox;
-	var propertiesPage:ContinuousHBox;
-	var uniformsPage:ContinuousHBox;
-	var ui:TabView;
+	private var shaders:Array<NShader> = [];
+	private var list:ListView;
+	private var shadersPage:ContinuousHBox;
+	private var propertiesPage:ContinuousHBox;
+	private var uniformsPage:ContinuousHBox;
+	private var ui:TabView;
 
 	var originalWidth:Int;
 	var originalHeight:Int;
+	var spriteTargets:Map<FlxSprite, SpriteTarget> = new Map<FlxSprite, SpriteTarget>();
 
-	var CAM_UI:FlxCamera;
-	var CAM_MAIN:FlxCamera;
+	public var CAM_UI:FlxCamera;
+	public var CAM_MAIN:FlxCamera;
+
+	public var draggableObjects:Array<FlxSprite> = [];
 
 	override public function create()
 	{
@@ -102,6 +105,22 @@ class PlayState extends FlxState
 		addProperties();
 		addShaders();
 		add(ui);
+
+		FlxG.stage.window.onDropFile.add(function(path:String)
+		{
+			if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg"))
+			{
+				var bitmap:openfl.display.BitmapData = openfl.display.BitmapData.fromFile(path);
+				var sprite:FlxSprite = new FlxSprite(0, 0, bitmap);
+				sprite.updateHitbox();
+				sprite.cameras = [CAM_MAIN];
+				add(sprite);
+				sprite.screenCenter();
+				draggableObjects.push(sprite);
+			}
+			else
+				NLogs.print('[ERROR]: ASSET PATH \"${path}\" IS NOT AN IMAGE.', 'red');
+		});
 	}
 
 	private inline function addTabs()
