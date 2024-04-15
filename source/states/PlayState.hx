@@ -70,7 +70,7 @@ class PlayState extends FlxState
 		{
 			if (i.endsWith(".frag") || i.endsWith(".vert") || i.endsWith(".txt") || i.endsWith(".hx"))
 			{
-				NLogs.print(i);
+				NLogs.print(i, "yellow");
 				try
 				{
 					var s = new NShader(i.split(".")[0] /* REMOVES FILE EXTENSION */, sys.io.File.getContent(AssetPaths.shader(i)));
