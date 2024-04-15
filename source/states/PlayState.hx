@@ -27,6 +27,7 @@ import haxe.ui.events.MouseEvent;
 import haxe.ui.events.UIEvent;
 import haxe.xml.Access;
 import lime.app.Application;
+import math.Vectors.Vector2;
 import sys.io.File;
 
 using StringTools;
@@ -125,6 +126,7 @@ class PlayState extends FlxState
 				add(sprite);
 				sprite.screenCenter();
 				draggableObjects.push(sprite);
+				spriteTargets.set(sprite, new SpriteTarget(new Vector2(0, 0), sprite));
 			}
 			else
 				NLogs.print('[ERROR]: ASSET PATH \"${path}\" IS NOT AN IMAGE.', 'red');
@@ -329,13 +331,15 @@ class PlayState extends FlxState
 		for (sprite in spriteTargets.keys())
 		{
 			var ov:FlxSprite = spriteTargets.get(sprite).sprite != null ? spriteTargets.get(sprite).sprite : sprite;
-			if (FlxG.mouse.pressed && FlxG.mouse.overlaps(ov))
+			var getter:SpriteTarget = spriteTargets.get(sprite);
+			if (FlxG.mouse.pressed && FlxG.mouse.overlaps(ov) && !FlxG.mouse.overlaps(ui))
 			{
-				var getter = spriteTargets.get(sprite);
 				getter.position.x = FlxG.mouse.x;
 				getter.position.y = FlxG.mouse.y;
+				getter.scale.add(new Vector2(FlxG.mouse.wheel / 2, FlxG.mouse.wheel / 2));
 			}
 			// i just learnt lerp meant linear interpolation am i stupid gang
+			ov.scale.x = ov.scale.y = flixel.math.FlxMath.lerp(ov.scale.x, getter.scale.x, elapsed * 7);
 			ov.x = flixel.math.FlxMath.lerp(ov.x, spriteTargets.get(sprite).position.x - sprite.width / 2, elapsed * 10);
 			ov.y = flixel.math.FlxMath.lerp(ov.y, spriteTargets.get(sprite).position.y - sprite.height / 2, elapsed * 10);
 		}
