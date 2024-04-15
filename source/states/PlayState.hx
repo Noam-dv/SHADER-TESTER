@@ -336,7 +336,8 @@ class PlayState extends FlxState
 			{
 				target.position.x = FlxG.mouse.x;
 				target.position.y = FlxG.mouse.y;
-				target.scale.add(new Vector2(FlxG.mouse.wheel / 2, FlxG.mouse.wheel / 2));
+				target.scale.x += (FlxG.mouse.wheel * .1);
+				target.scale.y += (FlxG.mouse.wheel * .1);
 			}
 			// i just learnt lerp meant linear interpolation am i stupid gang
 			ov.scale.x = flixel.math.FlxMath.lerp(ov.scale.x, target.scale.x, elapsed * 7);
